@@ -3,10 +3,13 @@
   "RepoTags": [
     "misyangekkk9/hvatgemmbase:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103"
   ],
-  "RepoDigests": [],
+  "RepoDigests": [
+    "misyangekkk9/hvatgemmbase@sha256:59afee5bdb74e27c287b3fee445d6be7adc454057bb85f54c05e612a8c436eb4"
+  ],
   "Architecture": "amd64",
   "Os": "linux",
   "Created": "2026-11-03T01:40:37.77805853Z",
   "Size": 12827159597,
-  "published": false
+  "published": true,
+  "registry_digest": "sha256:59afee5bdb74e27c287b3fee445d6be7adc454057bb85f54c05e612a8c436eb4"
 }
