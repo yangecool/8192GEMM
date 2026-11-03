@@ -25,5 +25,11 @@
     "Created": "2026-10-15T08:48:18.287487328Z"
   },
   "packaging": "New standalone launcher; original benchmark, tuner and container helper copied byte for byte.",
-  "runtime": "Original ROCm/PyTorch base plus the original AITER version; dependencies installed through AITER package metadata."
+  "runtime": "PyTorch 2.12.0+rocm10.0.0; AITER 0.1.22+amd.gfx1201.r9600.rocm10.gfc1a037a6f.",
+  "reference_metadata_corrections": {
+    "reference/results.json": {
+      "metadata.gpu": "AMD Radeon AI PRO R9600"
+    }
+  },
+  "reference_measurements_modified": false
 }

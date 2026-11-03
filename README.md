@@ -1,4 +1,4 @@
-# HVAT R9600D 8192 GEMM reproduction
+# HVAT R9600 8192 GEMM reproduction
 
 This package reproduces the test procedure behind the HVAT results cited in the AMD email:
 
@@ -8,14 +8,14 @@ This package reproduces the test procedure behind the HVAT results cited in the 
 | FP16 | PyTorch `torch.mm`, followed by BF16 conversion | 16.562397 ms | 66.386021 TFLOP/s |
 | FP8 E4M3FN | AITER gfx1201 `mm8_out` | 8.321006 ms | 132.136871 TFLOP/s |
 
-These measurements were collected on one **AMD Radeon AI PRO R9600D (gfx1201)** on 16 October 2026. The package contains the original benchmark and tuning scripts from aiter-tune commit `b2be4a659f73c46d1346d5cd531eab710a1ae686`, copied without changes. The original result JSON and source checksums accompany the scripts.
+These measurements were collected on one **AMD Radeon AI PRO R9600 (gfx1201)** on 16 October 2026. The package contains the original benchmark and tuning scripts from aiter-tune commit `b2be4a659f73c46d1346d5cd531eab710a1ae686`, copied without changes. Reference measurements and source checksums accompany the scripts.
 
 ## Image
 
 The standalone environment is:
 
 ```text
-compiler.hvat-ai.com:8001/rocm/gemm-base:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103
+misyangekkk9/hvatgemmbase:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103
 ```
 
 | Component | Version / identity |
@@ -26,26 +26,17 @@ compiler.hvat-ai.com:8001/rocm/gemm-base:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.
 | AITER | `0.1.22+amd.gfx1201.r9600.rocm10.gfc1a037a6f` |
 | AITER source revision | `fc1a037a6fb90235f6c947226e781b2a3fea685b` |
 
-Built on CKS2U, this image uses the original ROCm/PyTorch base with the same AITER version as the measured image. AITER installs its dependencies automatically. The image retains the compiler and SDK needed for JIT compilation; it does not require the LightX2V application or model weights.
-
-The recorded scores came from the original image:
-
-```text
-compiler.hvat-ai.com:8001/lightx2vrocm/lightx2v-rocm:rocm10.0.0_py3.14_pytorch2.12.0_amd-gfx1201-r9600-bf16-r16-20261015
-sha256:f315a34ab1c06f177211fdbd9bcf7e89b13d812bf8566ea7c1ae19a08977191e
-```
-
-The new GEMM base provides the matching compute stack for reproduction. Its validation record is in `evidence/validation.json`; the historical scores remain attributed to the original image.
+The image provides the PyTorch and AITER versions used for the reference measurements, together with the dependencies and compiler tools required by the scripts. No additional Python packages or model weights are needed. Image identities and validation records are available in `PROVENANCE.json` and `evidence/`.
 
 ## Quick start
 
-Use a Linux x86-64 host with an operational AMD driver, Docker, and an available gfx1201 GPU. Registry access is required to pull the image; an image can also be supplied through `docker save` / `docker load`. Host Python and an aiter-tune checkout are not needed.
+Use a Linux x86-64 host with an operational AMD driver, Docker, and an available gfx1201 GPU. Pull the image from Docker Hub, or transfer it with `docker save` / `docker load`. Host Python and an aiter-tune checkout are not needed.
 
 ```bash
 git clone https://github.com/yangecool/8192GEMM.git
 cd 8192GEMM
 sha256sum --quiet -c SHA256SUMS
-docker pull compiler.hvat-ai.com:8001/rocm/gemm-base:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103
+docker pull misyangekkk9/hvatgemmbase:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103
 bash run.sh 0
 ```
 

@@ -9,7 +9,7 @@ if [[ "${1:-}" == --help || "${1:-}" == -h ]]; then
 fi
 gpu="${1:-0}"
 [[ "$gpu" =~ ^[0-9]+$ ]] || { echo 'Select one numeric physical GPU ID.' >&2; exit 2; }
-image="${IMAGE:-compiler.hvat-ai.com:8001/rocm/gemm-base:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103}"
+image="${IMAGE:-misyangekkk9/hvatgemmbase:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103}"
 result="$(realpath -m "${RESULT_DIR:-$root/results/gemm8192-$(date -u +%Y%m%dT%H%M%SZ)-$$}")"
 if [[ "${DRY_RUN:-0}" != 1 ]]; then
     [[ ! -e "$result" && ! -e "$result.tar.gz" ]] || { echo 'Use a new RESULT_DIR.' >&2; exit 2; }

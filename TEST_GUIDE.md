@@ -2,7 +2,7 @@
 
 ## 1. Reference and measurement boundary
 
-The reference archive is `8192-gemm-20261016T062511Z-2376509.tar.gz`, SHA-256 `637d143efd497b439a3491f2c42e1abf68c3a749928b56f599fae926c0432a0e`. `reference/results.json` is copied from that archive. All three scores in the README belong to that same run and image.
+The reference archive is `8192-gemm-20261016T062511Z-2376509.tar.gz`, SHA-256 `637d143efd497b439a3491f2c42e1abf68c3a749928b56f599fae926c0432a0e`. `reference/results.json` retains its measurements, with the GPU model identified as R9600. All three scores in the README belong to that same run and image.
 
 | Property | Setting |
 |---|---|
@@ -62,13 +62,6 @@ Choose a fresh output directory or another physical GPU:
 RESULT_DIR="$PWD/results/r9600-repeat-01" bash run.sh 1
 ```
 
-Use the original measured image through the same standalone launcher:
-
-```bash
-IMAGE=compiler.hvat-ai.com:8001/lightx2vrocm/lightx2v-rocm:rocm10.0.0_py3.14_pytorch2.12.0_amd-gfx1201-r9600-bf16-r16-20261015 \
-  bash run.sh 0
-```
-
 The launcher verifies the package checksums. Before tuning, the original benchmark checks the AITER version and records the installed module paths. No host AITER checkout or separate dependency installation is needed.
 
 | File | Purpose |
@@ -83,18 +76,6 @@ The launcher verifies the package checksums. Before tuning, the original benchma
 
 Exit 0 means the full measurement and numerical checks completed. A changed score is reported as measured; matching the historical latency is not an exit condition. GPU frequency, power limits, driver and system activity can affect timing. Preserve the actual GPU model and all raw samples when comparing runs. The new package is intentionally runnable without Git metadata, so the original driver's `tune_commit` may be null; `package-provenance.json` identifies its exact source revision.
 
-## 5. Image preparation
+## 5. Provenance and validation scope
 
-The GEMM base was built on CKS2U from the original ROCm/PyTorch base:
-
-```text
-compiler.hvat-ai.com:8001/lightx2vrocm/lightx2v-base:rocm10.0.0_py3.14_pytorch2.12.0-r3
-```
-
-PyTorch is retained at `2.12.0+rocm10.0.0`. AITER is installed at `0.1.22+amd.gfx1201.r9600.rocm10.gfc1a037a6f`, with dependencies resolved by its installer. The delivered image is ready to run the supplied scripts.
-
-For offline transport, use `docker save` on a host with the image and `docker load` on the test host. Registry credentials are not included in this package.
-
-## 6. Provenance and validation scope
-
-`PROVENANCE.json` identifies the original source revision and result-archive/member hashes. `evidence/new-image.json` records the new image; `evidence/validation.json` lists the checks actually executed for this delivery. Build, import and dry-run checks do not constitute a new GPU performance measurement. GPU scores in `reference/results.json` remain the historical R9600D measurements.
+`PROVENANCE.json` identifies the original source revision and result-archive/member hashes. `evidence/new-image.json` records the Docker Hub image; `evidence/validation.json` lists the checks actually executed for this delivery. Import and dry-run checks do not constitute a new GPU performance measurement. GPU scores in `reference/results.json` remain the historical R9600 measurements; they have not been remeasured with the standalone image.
