@@ -24,5 +24,11 @@
   "historical_gpu_measurements_rerun": false,
   "scope": "Packaging and CPU checks only. Reference scores are from the original 2026-10-16 R9600 run, not a new measurement using this image.",
   "gpu_runtime_validation": "not performed for the standalone image",
-  "dockerhub_push": "passed; image digest unchanged"
+  "dockerhub_push": "passed; image digest unchanged",
+  "dockerhub_publication": {
+    "status": "passed",
+    "digest": "sha256:59afee5bdb74e27c287b3fee445d6be7adc454057bb85f54c05e612a8c436eb4",
+    "anonymous_manifest_access": true,
+    "content_digest_verified": true
+  }
 }
