@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-03",
+  "build_host": "CKS2U",
+  "gpu_present_on_build_host": false,
+  "image_build": "passed",
+  "registry_push": "passed",
+  "versions": {
+    "python": "3.14.7",
+    "torch": "2.12.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "amd-aiter": "0.1.22+amd.gfx1201.r9600.rocm10.gfc1a037a6f"
+  },
+  "torch_import_nonroot_readonly_container": "passed (writable /tmp provided)",
+  "benchmark_dry_run_in_new_image": "passed; all nine candidates listed",
+  "aiter_import_on_build_host": {
+    "status": "blocked_by_missing_gpu",
+    "detail": "AITER core JIT compilation completed; import then stopped at rocminfo because CKS2U has no AMD GPU. No GPU architecture was mocked."
+  },
+  "shell_syntax": "passed",
+  "package_sha256sums": "passed",
+  "standalone_launcher_dry_run": "passed; physical GPU 3 forwarded as HIP_VISIBLE_DEVICES=3, logical GPU 0 used inside the container",
+  "verification_checks": {
+    "python_syntax": "passed",
+    "missing_candidate": "correctly_rejected",
+    "nonfinite_sample": "correctly_rejected",
+    "accuracy_failure": "correctly_rejected",
+    "changed_repeats": "correctly_rejected",
+    "incomplete_tuning": "correctly_rejected",
+    "different_gpu": "labelled_separately",
+    "historical_reference": "passed"
+  },
+  "historical_gpu_measurements_rerun": false,
+  "scope": "Packaging and CPU checks only. Reference scores are from the original 2026-10-16 R9600D run, not a new measurement using this base image."
+}

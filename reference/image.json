@@ -1,0 +1,12 @@
+{
+  "Id": "sha256:f315a34ab1c06f177211fdbd9bcf7e89b13d812bf8566ea7c1ae19a08977191e",
+  "RepoTags": [
+    "compiler.hvat-ai.com:8001/lightx2vrocm/lightx2v-rocm:rocm10.0.0_py3.14_pytorch2.12.0_amd-gfx1201-r9600-bf16-r16-20261015"
+  ],
+  "RepoDigests": [
+    "compiler.hvat-ai.com:8001/lightx2vrocm/lightx2v-rocm@sha256:f315a34ab1c06f177211fdbd9bcf7e89b13d812bf8566ea7c1ae19a08977191e"
+  ],
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Created": "2026-10-15T08:48:18.287487328Z"
+}

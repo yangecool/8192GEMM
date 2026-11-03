@@ -1,0 +1,555 @@
+{
+  "metadata": {
+    "contract": {
+      "shape": [
+        8192,
+        8192,
+        8192
+      ],
+      "flops": 1099511627776,
+      "formula": "Y = X @ W.T",
+      "output_dtype": "BF16",
+      "accumulation_requested": "FP32",
+      "fp8_format": "E4M3FN",
+      "fp8_scale": "FP32 per-row for X and W",
+      "scope": "single GPU, full local shape; prequantized kernel-only",
+      "memory_bytes": {
+        "bf16": 402653184,
+        "fp16": 402653184,
+        "fp8": 268500992
+      },
+      "candidates": {
+        "bf16": [
+          "torch_mm",
+          "aiter_triton",
+          "aiter_gluon"
+        ],
+        "fp16": [
+          "torch_mm_then_bf16",
+          "aiter_triton"
+        ],
+        "fp8": [
+          "torch_scaled_mm",
+          "aiter_triton",
+          "aiter_ck",
+          "aiter_gfx1201_mm8"
+        ]
+      }
+    },
+    "utc_time": "2026-10-16T06:25:27Z",
+    "host": "a38bddae05e0",
+    "gpu": "AMD Radeon AI PRO R9600D",
+    "arch": "gfx1201",
+    "torch": "2.12.0+rocm10.0.0",
+    "hip": "7.15.26333",
+    "triton": "3.8.0",
+    "aiter_path": "/opt/python/lib/python3.14/site-packages/aiter/__init__.py",
+    "aiter_commit": null,
+    "aiter_source_preflight": null,
+    "aiter_image_preflight": {
+      "mode": "image",
+      "status": "passed",
+      "sources": {
+        "aiter": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter/__init__.py",
+          "sha256": "bae70e6b1853879450cd37941d3f73fa1b158b7f640bf7df2b77b96073e787b7"
+        },
+        "aiter.ops.triton.gemm.basic.gemm_a16w16": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter/ops/triton/gemm/basic/gemm_a16w16.py",
+          "sha256": "b02883f28ddf12c23130712970386c362d71168c3cd7b1ca2e77da8cb916c608"
+        },
+        "aiter.ops.triton.gemm.basic.gemm_a16w16_gfx1201": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter/ops/triton/gemm/basic/gemm_a16w16_gfx1201.py",
+          "sha256": "6cb8a78aa56e2c5bc91ca43b6a6d130a67261ae58c72a7b2096ded71c2ce51e2"
+        },
+        "aiter.ops.triton._triton_kernels.gemm.basic.gemm_a16w16": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter/ops/triton/_triton_kernels/gemm/basic/gemm_a16w16.py",
+          "sha256": "0af622c7269359ae2da5871d02a28781076be21a6342c0807ef85d0393a63f3c"
+        },
+        "aiter.ops.triton.gemm.basic.gemm_a8w8": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter/ops/triton/gemm/basic/gemm_a8w8.py",
+          "sha256": "6a5035883cbd24ab5fcc95f897841e275b2505160b734d49e71796291be5c224"
+        },
+        "aiter.ops.triton._triton_kernels.gemm.basic.gemm_a8w8": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter/ops/triton/_triton_kernels/gemm/basic/gemm_a8w8.py",
+          "sha256": "29efa1bcb1e071bcdfbeebaff419e5378c5aaf0a26e2d748441aa73260b5de10"
+        },
+        "aiter.ops.gemm_op_a8w8": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter/ops/gemm_op_a8w8.py",
+          "sha256": "a0941c57ef59c43dfca6bf51f53355f4cce69ce34e8b6ae2da9913d39cca8e92"
+        },
+        "aiter.ops.gfx1201.fp8_gemm": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter/ops/gfx1201/fp8_gemm.py",
+          "sha256": "8418cd865480c9f5ff4627ebff397291d80255db80312e531a8ad9c0ca5e0520"
+        },
+        "csrc.cpp_itfs.utils": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter_meta/csrc/cpp_itfs/utils.py",
+          "sha256": "065658cd11a2185e149ac6514c1a9a41d3966d2db490819ecb2bd987b31fc0c4"
+        },
+        "csrc.ck_gemm_a8w8.gemm_a8w8_common": {
+          "path": "/opt/python/lib/python3.14/site-packages/aiter_meta/csrc/ck_gemm_a8w8/gemm_a8w8_common.py",
+          "sha256": "852e70be23c78521c335f8e6a23423704bccc1cdb6d64a222c0107cf4b70e6f5"
+        }
+      },
+      "version": "0.1.22+amd.gfx1201.r9600.rocm10.gfc1a037a6f",
+      "image_version": "0.1.22+amd.gfx1201.r9600.rocm10.gfc1a037a6f",
+      "image_revision": "fc1a037a6fb90235f6c947226e781b2a3fea685b",
+      "package_root": "/opt/python/lib/python3.14/site-packages/aiter",
+      "csrc_root": "/opt/python/lib/python3.14/site-packages/aiter_meta/csrc",
+      "gluon_supported_archs": [
+        "gfx1250",
+        "gfx1201"
+      ]
+    },
+    "aiter_mode": "image",
+    "tune_commit": "b2be4a659f73c46d1346d5cd531eab710a1ae686",
+    "image": "compiler.hvat-ai.com:8001/lightx2vrocm/lightx2v-rocm:rocm10.0.0_py3.14_pytorch2.12.0_amd-gfx1201-r9600-bf16-r16-20261015",
+    "image_id": "sha256:f315a34ab1c06f177211fdbd9bcf7e89b13d812bf8566ea7c1ae19a08977191e",
+    "auto_tune": true,
+    "aiter_jit_dir": "/cache/aiter",
+    "aiter_root_dir": "/cache/aiter-root",
+    "hip_visible_devices": "0",
+    "parameters": {
+      "output_dir": "/reports/benchmark",
+      "dry_run": false,
+      "gpu": 0,
+      "warmup": 5,
+      "samples": 11,
+      "repeats": 3,
+      "max_nrmse": 0.02,
+      "tune_warmup": 1,
+      "tune_samples": 5,
+      "torch_tune_duration_ms": 100,
+      "torch_tune_iterations": 100,
+      "skip_tune": false
+    },
+    "tuning_search_complete": true,
+    "tuning_selected": {
+      "bf16": {
+        "aiter_triton": {
+          "config": {
+            "BLOCK_SIZE_M": 128,
+            "BLOCK_SIZE_N": 256,
+            "BLOCK_SIZE_K": 64,
+            "GROUP_SIZE_M": 8,
+            "num_warps": 8,
+            "num_stages": 2,
+            "waves_per_eu": 2,
+            "matrix_instr_nonkdim": 16,
+            "cache_modifier": null,
+            "NUM_KSPLIT": 1,
+            "SPLITK_BLOCK_SIZE": 8192
+          }
+        },
+        "aiter_gluon": {
+          "config": {
+            "variant": "reuse_256x128",
+            "GROUP_SIZE_M": 4
+          }
+        }
+      },
+      "fp16": {
+        "aiter_triton": {
+          "config": {
+            "BLOCK_SIZE_M": 128,
+            "BLOCK_SIZE_N": 256,
+            "BLOCK_SIZE_K": 64,
+            "GROUP_SIZE_M": 8,
+            "num_warps": 8,
+            "num_stages": 2,
+            "waves_per_eu": 2,
+            "matrix_instr_nonkdim": 16,
+            "cache_modifier": null,
+            "NUM_KSPLIT": 1,
+            "SPLITK_BLOCK_SIZE": 8192
+          }
+        }
+      },
+      "fp8": {
+        "aiter_triton": {
+          "config": {
+            "BLOCK_SIZE_M": 128,
+            "BLOCK_SIZE_N": 128,
+            "BLOCK_SIZE_K": 128,
+            "GROUP_SIZE_M": 1,
+            "num_warps": 8,
+            "num_stages": 2,
+            "waves_per_eu": 1,
+            "matrix_instr_nonkdim": 16,
+            "kpack": 1,
+            "cache_modifier": null,
+            "NUM_KSPLIT": 1,
+            "SPLITK_BLOCK_SIZE": 8192
+          }
+        },
+        "aiter_ck": {
+          "kernel_id": 13,
+          "split_k": 0,
+          "kernel_name": "a8w8_rowwise_256x128x128x128_32x32_2x2_8x32x1_8x32x1_1x32x1x8_8x8x1_1x1_intrawave_v3"
+        },
+        "aiter_gfx1201_mm8": {
+          "implementation": "mm8_out",
+          "tunable": false
+        }
+      }
+    },
+    "torch_tuning": {
+      "bf16": {
+        "precision": "bf16",
+        "candidate": "torch_mm",
+        "status": "library_dispatch",
+        "tune_wall_ms": 590.1964689837769,
+        "nrmse": 7.805982750141993e-05,
+        "max_abs": 0.5,
+        "max_rel": 0.0078125,
+        "reference_rms": 30.226118087768555,
+        "max_abs_limit": 6.045223617553711,
+        "new_tunable_results": []
+      },
+      "fp16": {
+        "precision": "fp16",
+        "candidate": "torch_mm_then_bf16",
+        "status": "library_dispatch",
+        "tune_wall_ms": 568.6213499866426,
+        "nrmse": 0.0014485971769317985,
+        "max_abs": 0.5,
+        "max_rel": 0.007751937955617905,
+        "reference_rms": 30.214374542236328,
+        "max_abs_limit": 6.042874908447266,
+        "new_tunable_results": []
+      },
+      "fp8": {
+        "precision": "fp8",
+        "candidate": "torch_scaled_mm",
+        "status": "library_dispatch",
+        "tune_wall_ms": 42.66430001007393,
+        "nrmse": 8.372709999093786e-05,
+        "max_abs": 0.5,
+        "max_rel": 0.007518797181546688,
+        "reference_rms": 30.261531829833984,
+        "max_abs_limit": 6.052306365966797,
+        "new_tunable_results": []
+      }
+    }
+  },
+  "results": [
+    {
+      "precision": "bf16",
+      "candidate": "torch_mm",
+      "status": "ok",
+      "first_call_wall_ms": 17.497213004389778,
+      "nrmse": 7.805982750141993e-05,
+      "max_abs": 0.5,
+      "max_rel": 0.0078125,
+      "reference_rms": 30.226118087768555,
+      "max_abs_limit": 6.045223617553711,
+      "median_ms": 14.992744445800781,
+      "min_ms": 14.155812581380209,
+      "max_ms": 15.202864329020182,
+      "tflops": 73.33624819330227,
+      "samples_ms": [
+        15.202864329020182,
+        14.992744445800781,
+        14.196585337320963,
+        15.051544189453125,
+        14.155812581380209,
+        15.00939687093099,
+        14.190931955973307,
+        15.040210723876953,
+        14.20931879679362,
+        15.04162343343099,
+        14.172012329101562
+      ]
+    },
+    {
+      "precision": "bf16",
+      "candidate": "aiter_triton",
+      "status": "ok",
+      "tuning_spec": {
+        "config": {
+          "BLOCK_SIZE_M": 128,
+          "BLOCK_SIZE_N": 256,
+          "BLOCK_SIZE_K": 64,
+          "GROUP_SIZE_M": 8,
+          "num_warps": 8,
+          "num_stages": 2,
+          "waves_per_eu": 2,
+          "matrix_instr_nonkdim": 16,
+          "cache_modifier": null,
+          "NUM_KSPLIT": 1,
+          "SPLITK_BLOCK_SIZE": 8192
+        }
+      },
+      "first_call_wall_ms": 15.269069001078606,
+      "nrmse": 6.516081339213997e-05,
+      "max_abs": 0.25,
+      "max_rel": 0.007407407276332378,
+      "reference_rms": 30.226118087768555,
+      "max_abs_limit": 6.045223617553711,
+      "median_ms": 16.69770050048828,
+      "min_ms": 16.115976969401043,
+      "max_ms": 17.768909454345703,
+      "tflops": 65.84808655202838,
+      "samples_ms": [
+        16.69770050048828,
+        17.63600794474284,
+        16.195349375406902,
+        17.768909454345703,
+        16.130686442057293,
+        17.697349548339844,
+        16.160484313964844,
+        17.717005411783855,
+        16.264793395996094,
+        17.716341654459637,
+        16.115976969401043
+      ]
+    },
+    {
+      "precision": "bf16",
+      "candidate": "aiter_gluon",
+      "status": "ok",
+      "tuning_spec": {
+        "config": {
+          "variant": "reuse_256x128",
+          "GROUP_SIZE_M": 4
+        }
+      },
+      "first_call_wall_ms": 14.758334000362083,
+      "nrmse": 6.516081339213997e-05,
+      "max_abs": 0.25,
+      "max_rel": 0.007407407276332378,
+      "reference_rms": 30.226118087768555,
+      "max_abs_limit": 6.045223617553711,
+      "median_ms": 16.613300323486328,
+      "min_ms": 16.51678721110026,
+      "max_ms": 17.08587646484375,
+      "tflops": 66.18261310918537,
+      "samples_ms": [
+        16.581949869791668,
+        16.949129740397137,
+        16.51678721110026,
+        16.968616485595703,
+        16.577320098876953,
+        17.049489339192707,
+        16.566546122233074,
+        17.01207224527995,
+        16.613300323486328,
+        17.08587646484375,
+        16.54580307006836
+      ]
+    },
+    {
+      "precision": "fp16",
+      "candidate": "torch_mm_then_bf16",
+      "status": "ok",
+      "first_call_wall_ms": 19.701671990333125,
+      "nrmse": 0.0014485971769317985,
+      "max_abs": 0.5,
+      "max_rel": 0.007751937955617905,
+      "reference_rms": 30.214374542236328,
+      "max_abs_limit": 6.042874908447266,
+      "median_ms": 16.562397003173828,
+      "min_ms": 15.519543965657553,
+      "max_ms": 16.711008707682293,
+      "tflops": 66.3860205479498,
+      "samples_ms": [
+        16.66238276163737,
+        16.562397003173828,
+        15.569037119547525,
+        16.606544494628906,
+        15.59286371866862,
+        16.579410552978516,
+        15.62549082438151,
+        16.711008707682293,
+        15.61855697631836,
+        16.562957763671875,
+        15.519543965657553
+      ]
+    },
+    {
+      "precision": "fp16",
+      "candidate": "aiter_triton",
+      "status": "ok",
+      "tuning_spec": {
+        "config": {
+          "BLOCK_SIZE_M": 128,
+          "BLOCK_SIZE_N": 256,
+          "BLOCK_SIZE_K": 64,
+          "GROUP_SIZE_M": 8,
+          "num_warps": 8,
+          "num_stages": 2,
+          "waves_per_eu": 2,
+          "matrix_instr_nonkdim": 16,
+          "cache_modifier": null,
+          "NUM_KSPLIT": 1,
+          "SPLITK_BLOCK_SIZE": 8192
+        }
+      },
+      "first_call_wall_ms": 16.947770986007527,
+      "nrmse": 0.00022734218509867787,
+      "max_abs": 0.5,
+      "max_rel": 0.0078125,
+      "reference_rms": 30.214374542236328,
+      "max_abs_limit": 6.042874908447266,
+      "median_ms": 17.17910893758138,
+      "min_ms": 16.78918965657552,
+      "max_ms": 18.055540720621746,
+      "tflops": 64.00283226394154,
+      "samples_ms": [
+        17.17910893758138,
+        18.055540720621746,
+        16.86846923828125,
+        18.04991404215495,
+        16.87343978881836,
+        18.05142084757487,
+        16.828208923339844,
+        18.05382792154948,
+        16.78918965657552,
+        18.026994069417317,
+        16.791648864746094
+      ]
+    },
+    {
+      "precision": "fp8",
+      "candidate": "torch_scaled_mm",
+      "status": "ok",
+      "first_call_wall_ms": 21.47295299801044,
+      "nrmse": 8.372709999093786e-05,
+      "max_abs": 0.5,
+      "max_rel": 0.007518797181546688,
+      "reference_rms": 30.261531829833984,
+      "max_abs_limit": 6.052306365966797,
+      "median_ms": 11.860867818196615,
+      "min_ms": 11.6496950785319,
+      "max_ms": 12.153147379557291,
+      "tflops": 92.70077406049157,
+      "samples_ms": [
+        12.153147379557291,
+        11.851055145263672,
+        11.667134602864584,
+        11.884988149007162,
+        11.782854715983072,
+        11.969828287760416,
+        11.924360911051432,
+        11.860867818196615,
+        11.668694814046225,
+        11.862387339274088,
+        11.6496950785319
+      ]
+    },
+    {
+      "precision": "fp8",
+      "candidate": "aiter_triton",
+      "status": "ok",
+      "tuning_spec": {
+        "config": {
+          "BLOCK_SIZE_M": 128,
+          "BLOCK_SIZE_N": 128,
+          "BLOCK_SIZE_K": 128,
+          "GROUP_SIZE_M": 1,
+          "num_warps": 8,
+          "num_stages": 2,
+          "waves_per_eu": 1,
+          "matrix_instr_nonkdim": 16,
+          "kpack": 1,
+          "cache_modifier": null,
+          "NUM_KSPLIT": 1,
+          "SPLITK_BLOCK_SIZE": 8192
+        }
+      },
+      "first_call_wall_ms": 7.923316006781533,
+      "nrmse": 8.440649980911985e-05,
+      "max_abs": 0.5,
+      "max_rel": 0.007518797181546688,
+      "reference_rms": 30.261531829833984,
+      "max_abs_limit": 6.052306365966797,
+      "median_ms": 8.70099131266276,
+      "min_ms": 8.577431996663412,
+      "max_ms": 8.77835782368978,
+      "tflops": 126.36624819701342,
+      "samples_ms": [
+        8.77835782368978,
+        8.70099131266276,
+        8.581151326497396,
+        8.732991536458334,
+        8.664841334025065,
+        8.756031036376953,
+        8.705751419067383,
+        8.700591405232748,
+        8.577431996663412,
+        8.713431040445963,
+        8.614418029785156
+      ]
+    },
+    {
+      "precision": "fp8",
+      "candidate": "aiter_ck",
+      "status": "ok",
+      "tuning_spec": {
+        "kernel_id": 13,
+        "split_k": 0,
+        "kernel_name": "a8w8_rowwise_256x128x128x128_32x32_2x2_8x32x1_8x32x1_1x32x1x8_8x8x1_1x1_intrawave_v3"
+      },
+      "first_call_wall_ms": 8.611666999058798,
+      "nrmse": 8.517114474670961e-05,
+      "max_abs": 0.5,
+      "max_rel": 0.007518797181546688,
+      "reference_rms": 30.261531829833984,
+      "max_abs_limit": 6.052306365966797,
+      "median_ms": 9.8447634379069,
+      "min_ms": 9.76069704691569,
+      "max_ms": 10.03218905131022,
+      "tflops": 111.68492109646543,
+      "samples_ms": [
+        9.8447634379069,
+        9.96180280049642,
+        9.76069704691569,
+        9.977816899617514,
+        9.824723561604818,
+        10.03218905131022,
+        9.830416361490885,
+        9.925043106079102,
+        9.777764002482096,
+        10.01786994934082,
+        9.785697301228842
+      ]
+    },
+    {
+      "precision": "fp8",
+      "candidate": "aiter_gfx1201_mm8",
+      "status": "ok",
+      "tuning_spec": {
+        "implementation": "mm8_out",
+        "tunable": false
+      },
+      "first_call_wall_ms": 7.658120011910796,
+      "nrmse": 8.459906530333683e-05,
+      "max_abs": 0.5,
+      "max_rel": 0.007518797181546688,
+      "reference_rms": 30.261531829833984,
+      "max_abs_limit": 6.052306365966797,
+      "median_ms": 8.321005503336588,
+      "min_ms": 8.231351852416992,
+      "max_ms": 8.45797856648763,
+      "tflops": 132.1368706384239,
+      "samples_ms": [
+        8.231351852416992,
+        8.439485549926758,
+        8.274685541788736,
+        8.39952532450358,
+        8.321005503336588,
+        8.447898864746094,
+        8.316645304361979,
+        8.45797856648763,
+        8.261205037434896,
+        8.44749895731608,
+        8.270352045694986
+      ]
+    }
+  ],
+  "winners": {
+    "bf16": "torch_mm",
+    "fp16": "torch_mm_then_bf16",
+    "fp8": "aiter_gfx1201_mm8"
+  }
+}

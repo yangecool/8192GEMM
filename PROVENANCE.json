@@ -1,0 +1,29 @@
+{
+  "reference_archive": "8192-gemm-20261016T062511Z-2376509.tar.gz",
+  "archive_sha256": "637d143efd497b439a3491f2c42e1abf68c3a749928b56f599fae926c0432a0e",
+  "reference_members_sha256": {
+    "8192-gemm-20261016T062511Z-2376509/benchmark/results.json": "6867a02a532847a51101e559ce67869040425b0b2cc7ebee004f4d327d6d5787",
+    "8192-gemm-20261016T062511Z-2376509/benchmark/summary.md": "47f5e486977f09f008a8fa84b08a7ad50baf4978b85d26ec7a411e1560caedc9"
+  },
+  "source_repository": "git@gitcode.com:hvat-ai/aiter-tune-gfx1201.git",
+  "source_commit": "b2be4a659f73c46d1346d5cd531eab710a1ae686",
+  "unmodified_source_sha256": {
+    "gemm8192/benchmark_8192_gemm_gfx1201.py": "0954b92a761a98623008ae30f96cb95189e1c97ffebc3ea202049e3a22925854",
+    "gemm8192/tune_8192_gemm_gfx1201.py": "27e34a851bf8bb954aa16b4507d3ba687e61a9d1d103ab59a5abe0db66f01e90",
+    "common/run_in_image.sh": "62af93ccfced8413db6249ed54f589606210c4ee6e9638d0ca039cc8193f2a74"
+  },
+  "reference_image": {
+    "Id": "sha256:f315a34ab1c06f177211fdbd9bcf7e89b13d812bf8566ea7c1ae19a08977191e",
+    "RepoTags": [
+      "compiler.hvat-ai.com:8001/lightx2vrocm/lightx2v-rocm:rocm10.0.0_py3.14_pytorch2.12.0_amd-gfx1201-r9600-bf16-r16-20261015"
+    ],
+    "RepoDigests": [
+      "compiler.hvat-ai.com:8001/lightx2vrocm/lightx2v-rocm@sha256:f315a34ab1c06f177211fdbd9bcf7e89b13d812bf8566ea7c1ae19a08977191e"
+    ],
+    "Architecture": "amd64",
+    "Os": "linux",
+    "Created": "2026-10-15T08:48:18.287487328Z"
+  },
+  "packaging": "New standalone launcher; original benchmark, tuner and container helper copied byte for byte.",
+  "runtime": "Original ROCm/PyTorch base plus the original AITER version; dependencies installed through AITER package metadata."
+}
