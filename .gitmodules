@@ -1,0 +1,3 @@
+[submodule "third_party/RAPT-Kernels"]
+	path = third_party/RAPT-Kernels
+	url = https://github.com/jundali77/RAPT-Kernels.git

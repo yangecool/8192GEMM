@@ -1,65 +1,50 @@
-# HVAT R9600 8192 GEMM reproduction
+# 8192³ GEMM on AMD Radeon AI PRO R9600D
 
-This package reproduces the test procedure behind the HVAT results cited in the AMD email:
+The default benchmark runs the customer workload through AMD's RAPT v1.1 shared library. Each selected GPU computes the full `Y = X @ W.T` with M = N = K = 8192. BF16, FP16 and FP8 E4M3 inputs use FP32 accumulation and write BF16 directly. A second entry runs AMD's Quick benchmark with its own inputs and timing.
 
-| Input | Selected implementation | Median latency | Effective throughput |
-|---|---|---:|---:|
-| BF16 | PyTorch `torch.mm` | 14.992744 ms | 73.336248 TFLOP/s |
-| FP16 | PyTorch `torch.mm`, followed by BF16 conversion | 16.562397 ms | 66.386021 TFLOP/s |
-| FP8 E4M3FN | AITER gfx1201 `mm8_out` | 8.321006 ms | 132.136871 TFLOP/s |
+## Run on one GPU
 
-These measurements were collected on one **AMD Radeon AI PRO R9600 (gfx1201)** on 16 October 2026. The package contains the original benchmark and tuning scripts from aiter-tune commit `b2be4a659f73c46d1346d5cd531eab710a1ae686`, copied without changes. Reference measurements and source checksums accompany the scripts.
-
-## Image
-
-The standalone environment is:
-
-```text
-misyangekkk9/hvatgemmbase:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103
-```
-
-| Component | Version / identity |
-|---|---|
-| Python | 3.14.7 |
-| PyTorch | `2.12.0+rocm10.0.0` |
-| AMD Triton distribution | `3.8.0+git4cff872c.rocm10.0.0` |
-| AITER | `0.1.22+amd.gfx1201.r9600.rocm10.gfc1a037a6f` |
-| AITER source revision | `fc1a037a6fb90235f6c947226e781b2a3fea685b` |
-
-The image provides the PyTorch and AITER versions used for the reference measurements, together with the dependencies and compiler tools required by the scripts. No additional Python packages or model weights are needed. Image identities and validation records are available in `PROVENANCE.json` and `evidence/`.
-
-## Quick start
-
-Use a Linux x86-64 host with an operational AMD driver, Docker, and an available gfx1201 GPU. Pull the image from Docker Hub, or transfer it with `docker save` / `docker load`. Host Python and an aiter-tune checkout are not needed.
+Use a Linux host with an R9600D, the amdgpu driver, Docker, and Python 3.8 or newer. The runner reads the card's hotspot sensor and gives each container one render node. GPU index 0 selects `/dev/dri/renderD128`, index 1 selects `renderD129`, and so on.
 
 ```bash
-git clone https://github.com/yangecool/8192GEMM.git
+git clone --recurse-submodules https://github.com/yangecool/8192GEMM.git
 cd 8192GEMM
-sha256sum --quiet -c SHA256SUMS
-docker pull misyangekkk9/hvatgemmbase:rocm10.0.0_py3.14_pytorch2.12.0_aiter0.1.22_gfx1201-20261103
-bash run.sh 0
+docker pull rocm/pytorch:rocm10.0_ubuntu24.04_py3.12_pytorch_release_2.13.0
+
+./run.sh 0                          # Customer BF16, FP16 and per-row FP8
+./run.sh 0 --method quick           # AMD Quick, all four modes
+./run.sh 0 --case customer-fp8      # One precision
 ```
 
-Alternatively, extract the supplied `hvat-r9600-gemm8192-repro-20261103.tar.gz`, enter that directory, and run the same checksum, image-pull and test commands. This route does not require Git on the host.
+For an existing clone, run `git pull --ff-only` followed by `git submodule update --init`. The submodule pins the upstream wrapper, shared library and Quick script to commit `81d5d928`. The launcher verifies all three files against [their SHA-256 digests](rapt/RAPT.sha256). [Upstream RAPT release](https://github.com/jundali77/RAPT-Kernels/tree/81d5d9282c8ed447a207b7d62bfc9871d72a7237/Benchmarks/BF16-FP16-FP8%20GEMM).
 
-`0` selects the physical GPU exposed through `HIP_VISIBLE_DEVICES`; the process uses logical device 0 inside its container. Run with the selected GPU available for the test. The launcher records the actual model, so runs on an R9700 are identifiable separately.
+## Measurement protocols
 
-The script performs the original tuning stage, then independently measures all nine candidates. It uses a read-only, network-disabled container and writable result/cache mounts. The first run compiles any required JIT kernels before timing.
+| | Customer (default) | AMD Quick |
+|---|---|---|
+| Input | Uniform in [−1, 1), with seeds 8192 for X and 9600 for W | Upstream `torch.rand` in [0, 1), seed 0 |
+| FP8 | Independently quantize each row of X and W to E4M3 using its FP32 absmax divided by 448, with a scale floor of 1e−8. The kernel applies both scales before the BF16 store. | Cast random values to E4M3. Row mode supplies independent random scales in [0.5, 1.5). Tensor mode uses 0.75 for X and 1.25 for W. |
+| Timed work | Packed weights, prepared inputs, and a preallocated BF16 output. Five warm-ups, then 11 HIP-event samples of three GEMMs each. Use the median time per GEMM. | Original `bench.py` defaults. Each round runs 50 warm-ups and 200 timed calls per implementation. Two rounds alternate RAPT and torch order, with zero gap. Use the mean of the two RAPT times. |
+| Validation | Compare 16 full output rows to a sampled FP32 reference rounded to BF16 and check the entire output is finite, before and after timing. Additional probes exercise FP16 input producing 131072 in BF16 and independent FP8 row scales. | Original full-output `torch.allclose` against the BF16-output torch reference. The launcher requires an explicit upstream `PASSED` before accepting a result. |
 
-The final lines identify the result directory, its `.tar.gz` archive and the exit status. Return the complete archive, including `benchmark/results.json`, tuning records, image inspection and `reproduction-check.json`.
+Each score is `2 × 8192³ / (time in seconds) / 10¹²` TFLOP/s. Input preparation, weight packing and correctness checks run outside the event timer. The customer script reuses this repository's original input, reference and timing helpers. [RAPT customer benchmark](rapt/customer.py) · [Single-case runner](rapt/case.py)
 
-## Workload
+## Reproduce the four-image, eight-card tables
 
-`Y = X @ W.T`, with M=N=K=8192 and contiguous row-major X and W. Output is BF16; FP32 accumulation is the specified compute requirement. FP8 uses E4M3FN and FP32 per-row scales on both operands. Each GPU executes the whole GEMM independently.
+Preload the four ROCm PyTorch images listed in [rapt/images.txt](rapt/images.txt). The second field records each image ID used for the published measurements. Set `IMAGE_REPO` to use a local mirror with the same tags. For a single image, set `IMAGE` to the complete image name.
 
-The original input generator uses uniform values in **[-1, 1)** with seeds 8192 and 9600. FP8 quantization occurs before timing. The measured FP16 path writes an intermediate FP16 result and then converts it to BF16. The FP8 path applies both row scales before BF16 rounding. These details matter when comparing with a `hipblas-bench` result.
+```bash
+while read -r tag image_id; do docker pull "rocm/pytorch:$tag"; done < rapt/images.txt
+./run.sh 0,1,2,3,4,5,6,7 --matrix --dry-run
+./run.sh 0,1,2,3,4,5,6,7 --matrix
+```
 
-The timing procedure, numerical checks and interpretation of results are in [TEST_GUIDE.md](TEST_GUIDE.md).
+Start with idle cards and run one launcher on the host. The matrix covers eight cards, four images and seven cases (224 single-GPU measurements). The launcher interleaves cards, images and precisions and waits for each container to finish. Each card rests for at least 60 seconds between cases. Its starting hotspot must be at most 30 °C and within 4 °C above its recorded idle baseline. A failed check stops the run before aggregation.
 
-## Files
+The tested ROCm 10.2.0 image reports the R9600D as “R9600 Series”. For that exact image ID and PCI board revision, the launcher mounts a temporary, checksum-verified libdrm copy with the R9600D product name. Each run records the applicable image ID and name correction in `provenance.json`. All four images load the same verified RAPT binary.
 
-- `run.sh`: standalone container launcher and result packaging.
-- `vendor/`: original benchmark, tuning script and container helper, unchanged.
-- `reference/`: original measurements and image identity.
-- `verify_run.py`: measurement completeness and numerical checks.
-- `PROVENANCE.json`, `evidence/`: source lineage and validation record.
+Results go under `results/rapt-*`, or a new directory specified by `RESULT_DIR`. Each case preserves its GPU UUID, image ID, starting temperature, raw timings and validation results. Quick cases also retain upstream stdout. In `summary.json` each image and case has all individual GPU scores, their median, the maximum and the card indices attaining it. Table cells use the median of the unrounded single-GPU scores.
+
+## Deprecated PyTorch / AITER benchmark
+
+The original nine-candidate method, reference results, and validation records remain available for historical reproduction. Select it explicitly with `./run.sh --legacy 0`. Its FP16 path rounds to FP16 before converting to BF16. [Original procedure and results](LEGACY.md) · [Historical test guide](TEST_GUIDE.md)

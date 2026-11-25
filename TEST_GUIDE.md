@@ -1,8 +1,10 @@
-# Test guide
+# Deprecated PyTorch / AITER test guide
+
+See [README.md](README.md) for the current RAPT protocol.
 
 ## 1. Reference and measurement boundary
 
-The reference archive is `8192-gemm-20261016T062511Z-2376509.tar.gz`, SHA-256 `637d143efd497b439a3491f2c42e1abf68c3a749928b56f599fae926c0432a0e`. `reference/results.json` retains its measurements, with the GPU model identified as R9600. All three scores in the README belong to that same run and image.
+The reference archive is `8192-gemm-20261016T062511Z-2376509.tar.gz`, SHA-256 `637d143efd497b439a3491f2c42e1abf68c3a749928b56f599fae926c0432a0e`. `reference/results.json` retains its measurements, with the GPU model identified as R9600. All three scores in [LEGACY.md](LEGACY.md) belong to that same run and image.
 
 | Property | Setting |
 |---|---|
@@ -53,13 +55,13 @@ For historical fidelity, the benchmark preserves the original image's PyTorch ba
 Preview the Docker command without running a GPU test:
 
 ```bash
-DRY_RUN=1 bash run.sh 0
+DRY_RUN=1 bash run.sh --legacy 0
 ```
 
 Choose a fresh output directory or another physical GPU:
 
 ```bash
-RESULT_DIR="$PWD/results/r9600-repeat-01" bash run.sh 1
+RESULT_DIR="$PWD/results/r9600-repeat-01" bash run.sh --legacy 1
 ```
 
 The launcher verifies the package checksums. Before tuning, the original benchmark checks the AITER version and records the installed module paths. No host AITER checkout or separate dependency installation is needed.
